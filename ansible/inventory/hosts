@@ -1,0 +1,2 @@
+[app]
+web ansible_ssh_user=vagrant
