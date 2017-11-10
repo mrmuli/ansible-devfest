@@ -1,0 +1,7 @@
+
+- name: Load credentials
+  hosts: app
+  connection: local
+  gather_facts: False
+  tasks:
+    - include_vars: "{{ inventory_dir }}/vars/variables.yml"
