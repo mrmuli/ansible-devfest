@@ -1,0 +1,26 @@
+---
+# install nodejs environment
+- name: Deploy Nodejs App
+  hosts: app
+  become: true
+  vars:
+    - app_dir: /src/app
+  tasks:
+    - name: Clone app
+      git:
+        repo: https://github.com/nyambati/react-program.git
+        dest: "{{ app_dir }}"
+        force: yes
+        version: master
+
+    - name: Install packages based on package.json.
+      npm:
+        path: "{{ app_dir }}"
+
+    - name: Build The app.
+      command: npm run build chdir={{ app_dir }}
+
+    - name: Configure Nginx
+      template:
+        src: "{{playbook_dir}}/templates/default.j2"
+        dest: /etc/nginx/sites-enabled/default
