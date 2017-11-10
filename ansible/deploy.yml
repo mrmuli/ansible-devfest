@@ -1,26 +1,32 @@
 ---
+# Load variables
+
+- import_playbook: variables.yml
+
 # install nodejs environment
-- name: Deploy Nodejs App
+- name: DownLoad and Deploy the application
   hosts: app
   become: true
-  vars:
-    - app_dir: /src/app
+
   tasks:
-    - name: Clone app
+
+    - name: Clone Nodejs App from GitHub
       git:
-        repo: https://github.com/nyambati/react-program.git
+        repo: "{{ app_repo }}"
         dest: "{{ app_dir }}"
         force: yes
-        version: master
+        version: "{{ app_repo_branch }}"
 
     - name: Install packages based on package.json.
-      npm:
-        path: "{{ app_dir }}"
+      npm: path={{ app_dir }}
 
     - name: Build The app.
       command: npm run build chdir={{ app_dir }}
 
     - name: Configure Nginx
       template:
-        src: "{{playbook_dir}}/templates/default.j2"
+        src: "{{ playbook_dir }}/templates/default.j2"
         dest: /etc/nginx/sites-enabled/default
+
+    - name: Restart Nginx Server
+      service: name=nginx state=restarted
