@@ -1,0 +1,9 @@
+app_dir: /src/app
+app_repo: https://github.com/nyambati/react-program.git
+app_repo_branch: master
+app_dependencies:
+  - nodejs
+  - git
+  - nginx
+nodejs_version: 8
+server_name: localhost
